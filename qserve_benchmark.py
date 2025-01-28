@@ -77,7 +77,7 @@ def main(args: argparse.Namespace):
     """Main function that sets up and runs the prompt processing."""
 
     batch_size = int(os.environ.get("GLOBAL_BATCH_SIZE"))
-    prompt_len = 1024
+    prompt_len = 512
     generation_len = 512
     rounds = 3
 
@@ -95,12 +95,23 @@ def main(args: argparse.Namespace):
             engine = initialize_engine(args)
             engine.profiling_mode = True
             # warm up
+            #from torch.profiler import profile, record_function, ProfilerActivity
+            #with profile(
+            #    activities=[ProfilerActivity.CPU, ProfilerActivity.CUDA],
+            #    record_shapes=True,
+            #    #profile_memory=True,
+            #    with_stack=True,
+            #    experimental_config=torch._C._profiler._ExperimentalConfig(verbose=True)
+            #) as prof:
             time_lis, num_tokens = process_requests(
                 engine,
                 batch_size=batch_size,
                 prompt_len=prompt_len,
                 generation_len=generation_len,
             )
+            #print(prof.key_averages().table(sort_by="self_cuda_time_total", row_limit=10))
+            #import pdb;pdb.set_trace()
+
             del engine
             torch.cuda.empty_cache()
             gc.collect()
