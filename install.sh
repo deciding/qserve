@@ -8,11 +8,12 @@ pip install --upgrade pip  # enable PEP 660 support
 conda install -c nvidia cuda-toolkit -y
 # torch==2.3.0
 pip install -e .
-pip install llava-torch
+#pip install llava-torch
 pip install flash-attn --no-build-isolation
 
-cd kernel & CUDA_HOME=/home/user/miniconda3/envs/QServe python setup.py install # before torch 2.0.1, there were no ExchangeDevice in CUDAFunctions.h
+cd kernel & CUDA_HOME=$HOME/miniconda3/envs/QServe python setup.py install # before torch 2.0.1, there were no ExchangeDevice in CUDAFunctions.h
 
 # git lfs install  # install git lfs if not already
 mkdir -p qserve_checkpoints && cd qserve_checkpoints
 git clone https://huggingface.co/mit-han-lab/Llama-3-8B-QServe 
+git clone https://huggingface.co/mit-han-lab/Llama-3-8B-Instruct-QServe
